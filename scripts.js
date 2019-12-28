@@ -1,15 +1,18 @@
 function handleImage (e) {
-  var reader = new FileReader()
-  reader.onload = function (event) {
+  for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
+    var file = e.originalEvent.srcElement.files[i];
+    var reader = new FileReader();
     var img = new Image()
-    img.onload = function () {
-      canvas.width = img.width
-      canvas.height = img.height
-      ctx.drawImage(img, 0, 0)
+    reader.onloadend = function() {
+      img.onload = function () {
+        canvas.width = img.width
+        canvas.height = img.height
+        ctx.drawImage(img, 0, 0)
+      }
+      img.src = event.target.result
     }
-    img.src = event.target.result
+    reader.readAsDataURL(file);
   }
-  reader.readAsDataURL(e.target.files[0])
 }
 
 var imgupload = document.getElementById('imgupload')
