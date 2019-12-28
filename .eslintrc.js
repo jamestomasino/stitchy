@@ -1,4 +1,3 @@
 module.exports = {
-    "extends": "standard",
-    "extends": "canvas"
+    "extends": "standard"
 };
