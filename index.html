@@ -10,15 +10,21 @@
     <style>
       a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,caption,center,cite,code,dd,del,details,dfn,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,output,p,pre,q,ruby,s,samp,section,small,span,strike,strong,sub,summary,sup,table,tbody,td,tfoot,th,thead,time,tr,tt,u,ul,var,video{margin:0;padding:0;border:0;font:inherit;vertical-align:baseline}
       article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}
-      body{font-family:"Consolas",monospace;font-size:18px;margin:3% 5%;max-width:750px;background:#303030;color:#c1c1c1;line-height:1.4rem;}
+      body{font-family:"Consolas",monospace;font-size:18px;margin:0;background:#303030;color:#c1c1c1;line-height:1.4rem;}
       a{text-decoration:none;color:cyan}
       p{margin-bottom:.75rem}
+      #imageInput.hide { display: none; }
+      #container { display: none; }
+      #container.active { display: block; }
     </style>
+    <script src="https://unpkg.com/konva@4.1.0/konva.min.js"></script>
     <script defer type="text/javascript" src="./scripts.js"></script>
   </head>
   <body>
-    <label>Image File:</label><br/>
-    <input type="file" id="imageLoader" name="imageLoader"/>
-    <canvas id="imageCanvas"></canvas>
+    <div id="imageInput">
+      <label>Image File:</label>
+      <input type="file" id="imageLoader" name="imageLoader"/>
+    </div>
+    <div id="container"></div>
   </body>
 </html>
