@@ -13,6 +13,7 @@ function handleImage (e) {
       var yoda = new Konva.Image({
         x: 50,
         y: 50,
+        name: 'yoda',
         image: img,
         width: 106,
         height: 118,
@@ -46,11 +47,15 @@ stage.on('click tap', function (e) {
     return
   }
   if (!e.target.hasName('yoda')) {
+    console.log(e.target)
     return
   }
   stage.find('Transformer').destroy()
-  var tr = new Konva.Transformer()
+  var tr = new Konva.Transformer({
+    node: e.target,
+    keepRatio: true,
+    enabledAnchors: ['top-left', 'top-right', 'bottom-left', 'bottom-right']
+  })
   layer.add(tr)
-  tr.attachTo(e.target)
   layer.draw()
 })
