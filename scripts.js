@@ -22,6 +22,7 @@ function handleImage (e) {
       imageInput.classList.add('hide')
       container.classList.add('active')
       layer.add(yoda)
+      layer.draw()
     }
     img.src = event.target.result
   }
@@ -39,6 +40,7 @@ var stage = new Konva.Stage({
 
 var layer = new Konva.Layer()
 stage.add(layer)
+layer.draw()
 
 stage.on('click tap', function (e) {
   if (e.target === stage) {
