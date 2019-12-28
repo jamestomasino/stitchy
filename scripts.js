@@ -11,3 +11,7 @@ function handleImage (e) {
   }
   reader.readAsDataURL(e.target.files[0])
 }
+
+var imgupload = document.getElementById('imgupload')
+var canvas = document.getElementById('canvas')
+imgupload.addEventListener('change', handleImage)
