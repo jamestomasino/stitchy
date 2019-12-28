@@ -11,5 +11,9 @@ My wife loves to crochet, and likes to challenge herself by making new rectangul
 - [ ] `Process` the image using either black & white or dominant color per grid block
 - [ ] `Print` or `Save` the generated image
 
+## Development
+
+This project does not have any build tools, but you can choose to install the yarn/npm dependencies to activate linting settings.
+
 ## License
 [GPL3](LICENSE)

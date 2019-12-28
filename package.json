@@ -1,0 +1,19 @@
+{
+  "name": "stitchy",
+  "version": "1.0.0",
+  "description": "A tool to help generate crochet patterns",
+  "main": "scripts.js",
+  "repository": "https://github.com/jamestomasino/stitchy.git",
+  "author": "James Tomasino <james@tomasino.org>",
+  "license": "GPL-3.0",
+  "private": false,
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "eslint-config-canvas": "^2.0.0"
+  }
+}
