@@ -217,7 +217,6 @@ function bindRenderButton () {
           // flatten RGBA colors to RGB to prep for nearest-neighbor calc
           var rgb = rgba2rgb(R, G, B, A)
           var hex = getColor(rgbToHex(rgb[0], rgb[1], rgb[2]))
-          console.log(hex)
           // Fill square in output canvas with captured color
           renderCTX.fillStyle = hex
           renderCTX.fillRect(i, j, hInc, vInc)
@@ -246,6 +245,17 @@ function bindRenderButton () {
       stage.destroy()
       // Remove render button
       render.classList.remove('active')
+
+      // Create download link
+      var link = document.createElement('a')
+      link.innerHTML = 'Download'
+      link.id = 'download'
+      var todayDate = new Date().toISOString().slice(0, 10)
+      link.download = 'stitchy-pattern-' + todayDate + '.png'
+      link.addEventListener('click', function () {
+        link.href = renderCanvas.toDataURL()
+      }, false)
+      document.body.appendChild(link)
     }, 300)
   })
 }

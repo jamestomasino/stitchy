@@ -90,13 +90,15 @@ input {
     width: 200px;
   }
 }
-input[type=submit], button[type=submit], #render {
+input[type=submit], button[type=submit], #render, #download {
    text-transform: uppercase;
    padding: 10px 60px;
    color: white;
    background: #444;
    font-weight: normal;
    border: 0;
+   text-decoration: none;
+   cursor: pointer;
 }
 input[type=number] {
   text-align: center;
@@ -107,7 +109,7 @@ input[type=file] {
 #render {
   display: none;
 }
-#render.active {
+#render.active, #download {
   display: block;
   position: absolute;
   right: 0;
