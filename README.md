@@ -8,8 +8,8 @@ My wife loves to crochet, and likes to challenge herself by making new rectangul
 - [ ] `Create` a grid by total size in inches/cm and average stitch block size
 - [x] `Upload` an image to overlay the grid
 - [x] `Rotate`, `Scale`, `Transform` the image onto the grid
-- [x] `Process` the image using either black & white or dominant color per grid block (click the red button)
-- [x] `Print` or `Save` the generated image (right-click to save as works)
+- [x] `Process` the image using either black & white or dominant color per grid block
+- [x] `Print` or `Save` the generated image
 - [x] Make everything look pretty
 
 ## Development
