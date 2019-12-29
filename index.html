@@ -20,6 +20,7 @@
       #imageForm { display: none; }
       #imageForm.active { display: block; }
       .konvajs-content { background-color: #ccc; }
+      #render.active { display: block; position: absolute; right: 0; top: 0; width: 100px; height: 40px; background-color: #e10000; }
       input { height: 35px; }
     </style>
     <script defer type="text/javascript" src="https://unpkg.com/konva@4.1.0/konva.min.js"></script>
@@ -29,11 +30,11 @@
     <form action="#" method="post" id="form">
       <label>
         Number of rows:
-        <input type="number" id="rows" name="rows" min="1" max="150" />
+        <input type="number" id="rows" name="rows" min="1" max="150" value="50" />
       </label>
       <label>
         Number of columns:
-        <input type="number" id="columns" name="columns" min="1" max="150" />
+        <input type="number" id="columns" name="columns" min="1" max="150" value="50" />
       </label>
       <button type="submit">Submit</button>
     </form>
@@ -44,7 +45,7 @@
         <input type="file" id="imageLoader" name="imageLoader"/>
       </label>
     </div>
-
     <div id="container"></div>
+    <div id="render"></div>
   </body>
 </html>

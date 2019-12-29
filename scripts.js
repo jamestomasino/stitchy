@@ -1,5 +1,6 @@
 /* global FileReader, Image, Konva, Blob */
 var imageForm = document.getElementById('imageForm')
+var render = document.getElementById('render')
 var imageLoader = document.getElementById('imageLoader')
 var form = document.getElementById('form')
 var container = document.getElementById('container')
@@ -11,6 +12,14 @@ var height = window.innerHeight
 // Initial widths can be as big as the screen
 var gridWidth = width - 15
 var gridHeight = height - 5
+
+var yoda
+var stage
+var layer
+var hlines
+var vlines
+var renderImage
+var tr
 
 form.addEventListener('submit', process)
 
@@ -35,13 +44,13 @@ function process (e) {
   var gridMaxWidth = hInc * gw + 1
   var gridMaxHeight = vInc * gh + 1
 
-  var stage = new Konva.Stage({
+  stage = new Konva.Stage({
     container: 'container',
     width: gridMaxWidth + 1,
     height: gridMaxHeight + 1
   })
 
-  var layer = new Konva.Layer()
+  layer = new Konva.Layer()
   stage.add(layer)
   layer.draw()
 
@@ -54,7 +63,7 @@ function process (e) {
   }
 
   // Draw all the lines across the vertical axis
-  var vlines = new Konva.Line({
+  vlines = new Konva.Line({
     points: hArray,
     stroke: 'blue',
     strokeWidth: 0.1,
@@ -68,7 +77,7 @@ function process (e) {
     vArray.push(gridMaxWidth - 1, i)
     vArray.push(1, i)
   }
-  var hlines = new Konva.Line({
+  hlines = new Konva.Line({
     points: vArray,
     stroke: 'blue',
     strokeWidth: 0.1,
@@ -88,7 +97,7 @@ function process (e) {
     reader.onload = function (event) {
       var img = new Image()
       img.onload = function () {
-        var yoda = new Konva.Image({
+        yoda = new Konva.Image({
           x: 50,
           y: 50,
           name: 'yoda',
@@ -98,6 +107,7 @@ function process (e) {
           draggable: true
         })
         container.classList.add('active')
+        render.classList.add('active')
         imageForm.classList.remove('active')
         layer.add(yoda)
         yoda.moveToBottom()
@@ -118,12 +128,47 @@ function process (e) {
       return
     }
     stage.find('Transformer').destroy()
-    var tr = new Konva.Transformer({
+    tr = new Konva.Transformer({
       node: e.target,
       keepRatio: true,
       enabledAnchors: ['top-left', 'top-right', 'bottom-left', 'bottom-right']
     })
     layer.add(tr)
     layer.draw()
+  })
+
+  render.addEventListener('click', () => {
+    var content = document.querySelector('.konvajs-content')
+    var canvas = content.getElementsByTagName('canvas')[0]
+    var ctx = canvas.getContext('2d')
+
+    var renderCanvas = document.createElement('canvas')
+    var renderCTX = canvas.getContext('2d')
+
+    renderImage = new Konva.Image({
+      x: 0,
+      y: 0,
+      name: 'render',
+      image: renderCanvas,
+      draggable: false
+    })
+
+
+    for (var i = hInc / 2; i < gridMaxWidth; i += hInc) {
+      for (var j = hInc / 2; j < gridMaxHeight; j += vInc) {
+        var c = ctx.getImageData(i, j, 1, 1).data
+        renderCTX.fillStyle = 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + c[3] + ')'
+        renderCTX.fillRect(i - hInc / 2, j - vInc / 2, hInc, vInc)
+      }
+    }
+
+    tr.remove()
+    yoda.remove()
+    layer.add(renderImage)
+    renderImage.moveToBottom()
+    vlines.moveToTop()
+    hlines.moveToTop()
+    render.classList.remove('active')
+    stage.off('click tap')
   })
 }
