@@ -134,6 +134,8 @@ function bindImageUpload () {
           image: img,
           draggable: true
         })
+
+        pattern.scale(autoScale(img))
         container.classList.add('active')
         render.classList.add('active')
         imageForm.classList.remove('active')
@@ -317,4 +319,11 @@ function rgbToHex (r, g, b) {
     const hex = x.toString(16)
     return hex.length === 1 ? '0' + hex : hex
   }).join('')
+}
+
+function autoScale (imgEle) {
+  var rW = gridMaxWidth / imgEle.width
+  var rH = gridMaxHeight / imgEle.height
+  var scale = Math.min(rH < rW ? rH : rW, 1)
+  return { x: scale, y: scale }
 }
