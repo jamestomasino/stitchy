@@ -127,3 +127,19 @@ input[type=file] {
   max-width: 600px;
   margin-bottom: 25px;
 }
+#gridonholder {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 50px;
+}
+#gridonholder.active {
+  display: block;
+}
+#gridonholder label {
+  width: 80px;
+  display: inline-block;
+}
+#gridonholder #gridon {
+  height: auto;
+}

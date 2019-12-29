@@ -1,6 +1,8 @@
 /* global FileReader, Image, Konva, ColorThief, nearestColor */
 var imageForm = document.getElementById('imageForm')
 var render = document.getElementById('render')
+var gridonholder = document.getElementById('gridonholder')
+var gridon = document.getElementById('gridon')
 var imageLoader = document.getElementById('imageLoader')
 var form = document.getElementById('form')
 var flex = document.getElementById('flex')
@@ -33,6 +35,7 @@ var getColor // nearest color calculator
 var renderedGrid // 2d array of grid colors
 var renderCanvas // rendered Canvas
 var renderCTX // rendered Canvas context
+var isGridEnabled = true // toggle grid on and off
 
 form.addEventListener('submit', process)
 
@@ -233,10 +236,14 @@ function bindRenderButton () {
       drawRenderCanvas()
       // bind mouse clicks on the render canvas to change colors
       bindRenderCanvas()
+      // bind grid on toggle
+      bindGridOn()
       // Destroy Konva canvas
       stage.destroy()
       // Remove render button
       render.classList.remove('active')
+      // Show grid on checkbox
+      gridonholder.classList.add('active')
 
       // Create download link
       var link = document.createElement('a')
@@ -277,6 +284,17 @@ function bindRenderCanvas () {
   })
 }
 
+function bindGridOn () {
+  gridon.addEventListener('change', function () {
+    if (gridon.checked) {
+      isGridEnabled = true
+    } else {
+      isGridEnabled = false
+    }
+    drawRenderCanvas()
+  })
+}
+
 function drawRenderCanvas () {
   renderCTX.fillStyle = 'white'
   renderCTX.fillRect(0, 0, renderCanvas.width, renderCanvas.height)
@@ -287,22 +305,24 @@ function drawRenderCanvas () {
     }
   }
 
-  // Draw vertical grid lines on top
-  for (i = 1; i <= gridMaxWidth; i += hInc) {
-    renderCTX.beginPath()
-    renderCTX.moveTo(i, 1)
-    renderCTX.lineTo(i, gridMaxHeight)
-    renderCTX.strokeStyle = '#000'
-    renderCTX.stroke()
-  }
+  if (isGridEnabled) {
+    // Draw vertical grid lines on top
+    for (i = 1; i <= gridMaxWidth; i += hInc) {
+      renderCTX.beginPath()
+      renderCTX.moveTo(i, 1)
+      renderCTX.lineTo(i, gridMaxHeight)
+      renderCTX.strokeStyle = '#000'
+      renderCTX.stroke()
+    }
 
-  // Draw horizontal grid lines on top
-  for (i = 1; i <= gridMaxHeight; i += vInc) {
-    renderCTX.beginPath()
-    renderCTX.moveTo(1, i)
-    renderCTX.lineTo(gridMaxWidth, i)
-    renderCTX.strokeStyle = '#000'
-    renderCTX.stroke()
+    // Draw horizontal grid lines on top
+    for (i = 1; i <= gridMaxHeight; i += vInc) {
+      renderCTX.beginPath()
+      renderCTX.moveTo(1, i)
+      renderCTX.lineTo(gridMaxWidth, i)
+      renderCTX.strokeStyle = '#000'
+      renderCTX.stroke()
+    }
   }
 }
 
