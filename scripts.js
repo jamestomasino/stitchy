@@ -137,7 +137,8 @@ function bindImageUpload () {
         pattern.moveToBottom()
         layer.batchDraw()
         palette = colorThief.getPalette(img, colors)
-        var rgbpalette = palette.map(x => rgbToHex (x[0], x[1], x[2]))
+        var rgbpalette = palette.map(x => rgbToHex(x[0], x[1], x[2]))
+        rgbpalette.push('#fff') // force add white for backgrounds
         getColor = nearestColor.from(rgbpalette)
       }
       img.src = event.target.result
