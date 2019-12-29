@@ -22,6 +22,6 @@ Stitchy code is licensed under [GPL-3.0](LICENSE).
 
 The libraries used are managed under their own licenses:
 
-- [Konva]() - MIT
+- [Konva](https://konvajs.org/) - MIT
 - [nearest-color](https://github.com/dtao/nearest-color) - MIT
 - [ColorThief](https://github.com/lokesh/color-thief) - MIT
