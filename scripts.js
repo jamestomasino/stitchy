@@ -60,27 +60,40 @@ stage.on('click tap', function (e) {
   layer.draw()
 })
 
+// Initial widths can be as big as the screen
 var gridWidth = width - 15
 var gridHeight = height - 5
 
-var gw = 10
-var gh = 15
+// How many divisions will we use?
+var gw = 57
+var gh = 65
 
+// Calculate the increments we can use to make that many lines
 var hInc = Math.floor(gridWidth / gw + 1)
-var gridMaxWidth = hInc * gw + 1
 var vInc = Math.floor(gridHeight / gh + 1)
+
+// Use the smaller increment size to keep the grid square and still fit
+if (hInc > vInc) hInc = vInc
+else vInc = hInc
+
+// Multiply it back out so we have the actual grid dimensions
+var gridMaxWidth = hInc * gw + 1
 var gridMaxHeight = vInc * gh + 1
 
+
+// Draw all the lines across the horizontal axis
 var hArray = []
 for (var i = 1; i <= gridMaxWidth; i += hInc) {
   hArray.push(i, 1)
   hArray.push(i, gridMaxHeight - 1)
   hArray.push(i, 1)
 }
+
+// Draw all the lines across the vertical axis
 var vlines = new Konva.Line({
   points: hArray,
   stroke: 'white',
-  strokeWidth: 1,
+  strokeWidth: 0.1,
   lineCap: 'round',
   lineJoin: 'round'
 })
@@ -94,7 +107,7 @@ for (i = 1; i <= gridMaxHeight; i += vInc) {
 var hlines = new Konva.Line({
   points: vArray,
   stroke: 'white',
-  strokeWidth: 1,
+  strokeWidth: 0.1,
   lineCap: 'round',
   lineJoin: 'round'
 })
