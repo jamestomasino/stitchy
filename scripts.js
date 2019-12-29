@@ -1,10 +1,22 @@
-/* global FileReader, Image, Konva */
+/* global FileReader, Image, Konva, Blob */
 var imageLoader = document.getElementById('imageLoader')
 var imageInput = document.getElementById('imageInput')
 var container = document.getElementById('container')
+var width = window.innerWidth
+var height = window.innerHeight
 
+var stage = new Konva.Stage({
+  container: 'container',
+  width: width,
+  height: height
+})
+
+var layer = new Konva.Layer()
+stage.add(layer)
+layer.draw()
+
+/* Upload Image */
 imageLoader.addEventListener('change', handleImage, false)
-
 function handleImage (e) {
   var reader = new FileReader()
   reader.onload = function (event) {
@@ -22,25 +34,12 @@ function handleImage (e) {
       imageInput.classList.add('hide')
       container.classList.add('active')
       layer.add(yoda)
-      layer.draw()
+      layer.batchDraw()
     }
     img.src = event.target.result
   }
   reader.readAsDataURL(e.target.files[0])
 }
-
-var width = window.innerWidth
-var height = window.innerHeight
-
-var stage = new Konva.Stage({
-  container: 'container',
-  width: width,
-  height: height
-})
-
-var layer = new Konva.Layer()
-stage.add(layer)
-layer.draw()
 
 stage.on('click tap', function (e) {
   if (e.target === stage) {
@@ -49,7 +48,6 @@ stage.on('click tap', function (e) {
     return
   }
   if (!e.target.hasName('yoda')) {
-    console.log(e.target)
     return
   }
   stage.find('Transformer').destroy()
@@ -61,3 +59,45 @@ stage.on('click tap', function (e) {
   layer.add(tr)
   layer.draw()
 })
+
+var gridWidth = width - 15
+var gridHeight = height - 5
+
+var gw = 10
+var gh = 15
+
+var hInc = Math.floor(gridWidth / gw + 1)
+var gridMaxWidth = hInc * gw + 1
+var vInc = Math.floor(gridHeight / gh + 1)
+var gridMaxHeight = vInc * gh + 1
+
+var hArray = []
+for (var i = 1; i <= gridMaxWidth; i += hInc) {
+  hArray.push(i, 1)
+  hArray.push(i, gridMaxHeight - 1)
+  hArray.push(i, 1)
+}
+var vlines = new Konva.Line({
+  points: hArray,
+  stroke: 'white',
+  strokeWidth: 1,
+  lineCap: 'round',
+  lineJoin: 'round'
+})
+
+var vArray = []
+for (i = 1; i <= gridMaxHeight; i += vInc) {
+  vArray.push(1, i)
+  vArray.push(gridMaxWidth - 1, i)
+  vArray.push(1, i)
+}
+var hlines = new Konva.Line({
+  points: vArray,
+  stroke: 'white',
+  strokeWidth: 1,
+  lineCap: 'round',
+  lineJoin: 'round'
+})
+
+layer.add(vlines)
+layer.add(hlines)
