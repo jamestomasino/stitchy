@@ -137,9 +137,13 @@ input[type=file] {
   display: block;
 }
 #gridonholder label {
-  width: 80px;
   display: inline-block;
+}
+#gridonholder label span {
+  width: 80px;
 }
 #gridonholder #gridon {
   height: auto;
+  display: inline-block;
+  margin-left: 0;
 }
