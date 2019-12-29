@@ -8,8 +8,10 @@
     <title>Stitchy</title>
     <link rel="shortcut icon" href="https://jamestomasino.github.io/stitchy/favicon.ico">
     <link href="styles.css" rel="stylesheet" type="text/css">
-    <script defer type="text/javascript" src="https://unpkg.com/konva@4.1.0/konva.min.js"></script>
-    <script defer type="text/javascript" src="./scripts.js"></script>
+    <script defer type="text/javascript" src="konva.min.js"></script>
+    <script defer type="text/javascript" src="color-thief.umd.js"></script>
+    <script defer type="text/javascript" src="nearestColor.js"></script>
+    <script defer type="text/javascript" src="scripts.js"></script>
   </head>
   <body>
     <div id="flex">
@@ -22,7 +24,11 @@
           <span>Number of columns:</span>
           <input type="number" id="columns" name="columns" min="1" max="1000" value="50" />
         </label>
-        <button type="submit">Next</button>
+        <label for="columns">
+          <span>Number of colors to extract:</span>
+          <input type="number" id="colors" name="colors" min="1" max="100" value="3" />
+        </label>
+         <button type="submit">Next</button>
       </form>
 
       <div id="imageForm">

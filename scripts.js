@@ -1,4 +1,4 @@
-/* global FileReader, Image, Konva */
+/* global FileReader, Image, Konva, ColorThief */
 var imageForm = document.getElementById('imageForm')
 var render = document.getElementById('render')
 var imageLoader = document.getElementById('imageLoader')
@@ -7,6 +7,7 @@ var flex = document.getElementById('flex')
 var container = document.getElementById('container')
 var rows = document.getElementById('rows')
 var columns = document.getElementById('columns')
+var colorsInput = document.getElementById('colors')
 
 var pattern // Uploaded image
 var stage // Konva canvas container
@@ -22,6 +23,9 @@ var gridWidth // grid width init before fitting to container
 var gridHeight // grid height init before fitting to container
 var gridMaxWidth // total width of the grid in pixels
 var gridMaxHeight // total height of the grid in pixels
+const colorThief = new ColorThief()
+var colors // total number of colors to extract from pattern
+var palette // color palette of pattern
 
 form.addEventListener('submit', process)
 
@@ -47,6 +51,7 @@ function calculateGrid () {
   // How many divisions will we use?
   var gw = parseInt(columns.value, 10)
   var gh = parseInt(rows.value, 10)
+  colors = parseInt(colorsInput.value, 10)
 
   // Calculate the increments we can use to make that many lines
   hInc = Math.floor(gridWidth / gw)
@@ -130,6 +135,8 @@ function bindImageUpload () {
         layer.add(pattern)
         pattern.moveToBottom()
         layer.batchDraw()
+        palette = colorThief.getPalette(img, colors)
+        console.log(palette)
       }
       img.src = event.target.result
     }
@@ -175,13 +182,49 @@ function bindRenderButton () {
     flex.appendChild(renderCanvas)
 
     // Loop through grid at midpoints of quares
-    for (var i = hInc / 2; i < gridMaxWidth; i += hInc) {
-      for (var j = hInc / 2; j < gridMaxHeight; j += vInc) {
+    for (var i = 1; i < gridMaxWidth; i += hInc) {
+      for (var j = 1; j < gridMaxHeight; j += vInc) {
         // Get color at center of each grid square
-        var c = ctx.getImageData(i, j, 1, 1).data
+        // var c = ctx.getImageData(i, j, 1, 1).data
+
+        let R = 0
+        let G = 0
+        let B = 0
+        let A = 0
+
+        const data = ctx.getImageData(i, j, hInc, vInc).data
+
+        const components = data.length
+
+        for (let i = 0; i < components; i += 4) {
+          // A single pixel (R, G, B, A) will take 4 positions in the array:
+          const r = data[i]
+          const g = data[i + 1]
+          const b = data[i + 2]
+          const a = data[i + 3]
+
+          // Update components for solid color and alpha averages:
+          R += r
+          G += g
+          B += b
+          A += a
+        }
+
+        const pixelsPerChannel = components / 4
+
+        // The | operator is used here to perform an integer division:
+
+        R = R / pixelsPerChannel | 0
+        G = G / pixelsPerChannel | 0
+        B = B / pixelsPerChannel | 0
+
+        A = A / pixelsPerChannel / 255
+
+        var rgb = rgba2rgb(R, G, B, A)
+
         // Fill square in output canvas with captured color
-        renderCTX.fillStyle = 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + c[3] + ')'
-        renderCTX.fillRect(i - hInc / 2, j - vInc / 2, hInc, vInc)
+        renderCTX.fillStyle = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')'
+        renderCTX.fillRect(i, j, hInc, vInc)
       }
     }
 
@@ -211,3 +254,12 @@ function bindRenderButton () {
     stage.off('click tap')
   })
 }
+
+function rgba2rgb (r, g, b, a) {
+  return [
+    (1 - a) * 255 + a * r,
+    (1 - a) * 255 + a * g,
+    (1 - a) * 255 + a * b
+  ]
+}
+
