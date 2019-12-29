@@ -4,7 +4,7 @@ My wife loves to crochet, and likes to challenge herself by making new rectangul
 
 ## Goals / To Do
 
-- [ ] `Create` a grid of x-width and y-height
+- [x] `Create` a grid of x-width and y-height
 - [ ] `Create` a grid by total size in inches/cm and average stitch block size
 - [x] `Upload` an image to overlay the grid
 - [x] `Rotate`, `Scale`, `Transform` the image onto the grid
