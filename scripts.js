@@ -126,8 +126,6 @@ function bindImageUpload () {
           y: 50,
           name: 'pattern',
           image: img,
-          width: 106,
-          height: 118,
           draggable: true
         })
         container.classList.add('active')
