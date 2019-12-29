@@ -206,7 +206,7 @@ function bindRenderButton () {
           let G = 0
           let B = 0
           let A = 0
-          const data = ctx.getImageData(i * hInc, j * vInc, hInc, vInc).data
+          const data = ctx.getImageData(i * hInc * window.devicePixelRatio, j * vInc * window.devicePixelRatio, hInc * window.devicePixelRatio, vInc * window.devicePixelRatio).data
           const components = data.length
           for (let i = 0; i < components; i += 4) {
             // A single pixel (R, G, B, A) will take 4 positions in the array:
