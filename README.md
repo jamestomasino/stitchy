@@ -9,7 +9,7 @@ My wife loves to crochet, and likes to challenge herself by making new rectangul
 - [x] `Upload` an image to overlay the grid
 - [x] `Rotate`, `Scale`, `Transform` the image onto the grid
 - [x] `Process` the image using either black & white or dominant color per grid block (click the red button)
-- [ ] `Print` or `Save` the generated image (right-click to save as works)
+- [x] `Print` or `Save` the generated image (right-click to save as works)
 - [x] Make everything look pretty
 
 ## Development
