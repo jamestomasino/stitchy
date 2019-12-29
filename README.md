@@ -5,12 +5,12 @@ My wife loves to crochet, and likes to challenge herself by making new rectangul
 ## Goals / To Do
 
 - [x] `Create` a grid of x-width and y-height
-- [ ] `Create` a grid by total size in inches/cm and average stitch block size
 - [x] `Upload` an image to overlay the grid
 - [x] `Rotate`, `Scale`, `Transform` the image onto the grid
 - [x] `Process` the image using either black & white or dominant color per grid block
 - [x] `Print` or `Save` the generated image
 - [x] Make everything look pretty
+- [x] Click on a rendered grid square to cycle its color through palette options
 
 ## Development
 
