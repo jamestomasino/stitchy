@@ -17,4 +17,11 @@ My wife loves to crochet, and likes to challenge herself by making new rectangul
 This project does not have any build tools, but you can choose to install the yarn/npm dependencies to activate linting settings.
 
 ## License
-[GPL3](LICENSE)
+
+Stitchy code is licensed under [GPL-3.0](LICENSE).
+
+The libraries used are managed under their own licenses:
+
+- [Konva]() - MIT
+- [nearest-color](https://github.com/dtao/nearest-color) - MIT
+- [ColorThief](https://github.com/lokesh/color-thief) - MIT
