@@ -285,6 +285,7 @@ function bindRenderCanvas () {
 }
 
 function bindGridOn () {
+  gridon.checked = true
   gridon.addEventListener('change', function () {
     if (gridon.checked) {
       isGridEnabled = true
