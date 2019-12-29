@@ -168,79 +168,85 @@ function bindTransform () {
 
 function bindRenderButton () {
   render.addEventListener('click', () => {
-    // Get reference to raw canvas object in Konva
-    var content = document.querySelector('.konvajs-content')
-    var canvas = content.getElementsByTagName('canvas')[0]
-    var ctx = canvas.getContext('2d')
-
-    // Create new canvas object for flat output render
-    var renderCanvas = document.createElement('canvas')
-    var renderCTX = renderCanvas.getContext('2d')
-    renderCanvas.width = gridMaxWidth
-    renderCanvas.height = gridMaxHeight
-    renderCTX.fillStyle = 'white'
-    renderCTX.fillRect(0, 0, renderCanvas.width, renderCanvas.height)
-    flex.appendChild(renderCanvas)
-
-    // Loop through grid at midpoints of quares
-    for (var i = 1; i < gridMaxWidth; i += hInc) {
-      for (var j = 1; j < gridMaxHeight; j += vInc) {
-        let R = 0
-        let G = 0
-        let B = 0
-        let A = 0
-        const data = ctx.getImageData(i, j, hInc, vInc).data
-        const components = data.length
-        for (let i = 0; i < components; i += 4) {
-          // A single pixel (R, G, B, A) will take 4 positions in the array:
-          const r = data[i]
-          const g = data[i + 1]
-          const b = data[i + 2]
-          const a = data[i + 3]
-          R += r
-          G += g
-          B += b
-          A += a
-        }
-        const pixelsPerChannel = components / 4
-        R = R / pixelsPerChannel | 0
-        G = G / pixelsPerChannel | 0
-        B = B / pixelsPerChannel | 0
-        A = A / pixelsPerChannel / 255
-        // flatten RGBA colors to RGB to prep for nearest-neighbor calc
-        var rgb = rgba2rgb(R, G, B, A)
-        var hex = getColor(rgbToHex(rgb[0], rgb[1], rgb[2]))
-        console.log(hex)
-        // Fill square in output canvas with captured color
-        renderCTX.fillStyle = hex
-        renderCTX.fillRect(i, j, hInc, vInc)
-      }
-    }
-
-    // Draw vertical grid lines on top
-    for (i = 1; i <= gridMaxWidth; i += hInc) {
-      renderCTX.beginPath()
-      renderCTX.moveTo(i, 1)
-      renderCTX.lineTo(i, gridMaxHeight)
-      ctx.strokeStyle = '#33FF33'
-      renderCTX.stroke()
-    }
-
-    // Draw horizontal grid lines on top
-    for (i = 1; i <= gridMaxHeight; i += vInc) {
-      renderCTX.beginPath()
-      renderCTX.moveTo(1, i)
-      renderCTX.lineTo(gridMaxWidth, i)
-      ctx.strokeStyle = '#33FF33'
-      renderCTX.stroke()
-    }
-
-    // Destroy Konva canvas
-    stage.destroy()
-    // Remove render button
-    render.classList.remove('active')
+    // turn off the transformer if it's still on
+    stage.find('Transformer').destroy()
+    layer.draw()
     // Unbind click handler on stage
     stage.off('click tap')
+
+    setTimeout(function () {
+      // Get reference to raw canvas object in Konva
+      var content = document.querySelector('.konvajs-content')
+      var canvas = content.getElementsByTagName('canvas')[0]
+      var ctx = canvas.getContext('2d')
+
+      // Create new canvas object for flat output render
+      var renderCanvas = document.createElement('canvas')
+      var renderCTX = renderCanvas.getContext('2d')
+      renderCanvas.width = gridMaxWidth
+      renderCanvas.height = gridMaxHeight
+      renderCTX.fillStyle = 'white'
+      renderCTX.fillRect(0, 0, renderCanvas.width, renderCanvas.height)
+      flex.appendChild(renderCanvas)
+
+      // Loop through grid at midpoints of quares
+      for (var i = 1; i < gridMaxWidth; i += hInc) {
+        for (var j = 1; j < gridMaxHeight; j += vInc) {
+          let R = 0
+          let G = 0
+          let B = 0
+          let A = 0
+          const data = ctx.getImageData(i, j, hInc, vInc).data
+          const components = data.length
+          for (let i = 0; i < components; i += 4) {
+            // A single pixel (R, G, B, A) will take 4 positions in the array:
+            const r = data[i]
+            const g = data[i + 1]
+            const b = data[i + 2]
+            const a = data[i + 3]
+            R += r
+            G += g
+            B += b
+            A += a
+          }
+          const pixelsPerChannel = components / 4
+          R = R / pixelsPerChannel | 0
+          G = G / pixelsPerChannel | 0
+          B = B / pixelsPerChannel | 0
+          A = A / pixelsPerChannel / 255
+          // flatten RGBA colors to RGB to prep for nearest-neighbor calc
+          var rgb = rgba2rgb(R, G, B, A)
+          var hex = getColor(rgbToHex(rgb[0], rgb[1], rgb[2]))
+          console.log(hex)
+          // Fill square in output canvas with captured color
+          renderCTX.fillStyle = hex
+          renderCTX.fillRect(i, j, hInc, vInc)
+        }
+      }
+
+      // Draw vertical grid lines on top
+      for (i = 1; i <= gridMaxWidth; i += hInc) {
+        renderCTX.beginPath()
+        renderCTX.moveTo(i, 1)
+        renderCTX.lineTo(i, gridMaxHeight)
+        ctx.strokeStyle = '#33FF33'
+        renderCTX.stroke()
+      }
+
+      // Draw horizontal grid lines on top
+      for (i = 1; i <= gridMaxHeight; i += vInc) {
+        renderCTX.beginPath()
+        renderCTX.moveTo(1, i)
+        renderCTX.lineTo(gridMaxWidth, i)
+        ctx.strokeStyle = '#33FF33'
+        renderCTX.stroke()
+      }
+
+      // Destroy Konva canvas
+      stage.destroy()
+      // Remove render button
+      render.classList.remove('active')
+    }, 300)
   })
 }
 
