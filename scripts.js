@@ -18,8 +18,11 @@ var stage
 var layer
 var hlines
 var vlines
-var renderImage
 var tr
+var hInc
+var vInc
+var gridMaxWidth
+var gridMaxHeight
 
 form.addEventListener('submit', process)
 
@@ -33,16 +36,16 @@ function process (e) {
   var gh = rows.value
 
   // Calculate the increments we can use to make that many lines
-  var hInc = Math.floor(gridWidth / gw + 1)
-  var vInc = Math.floor(gridHeight / gh + 1)
+  hInc = Math.floor(gridWidth / gw + 1)
+  vInc = Math.floor(gridHeight / gh + 1)
 
   // Use the smaller increment size to keep the grid square and still fit
   if (hInc > vInc) hInc = vInc
   else vInc = hInc
 
   // Multiply it back out so we have the actual grid dimensions
-  var gridMaxWidth = hInc * gw + 1
-  var gridMaxHeight = vInc * gh + 1
+  gridMaxWidth = hInc * gw + 1
+  gridMaxHeight = vInc * gh + 1
 
   stage = new Konva.Stage({
     container: 'container',
@@ -143,16 +146,13 @@ function process (e) {
     var ctx = canvas.getContext('2d')
 
     var renderCanvas = document.createElement('canvas')
-    var renderCTX = canvas.getContext('2d')
+    renderCanvas.width = gridMaxWidth
+    renderCanvas.height = gridMaxHeight
+    var renderCTX = renderCanvas.getContext('2d')
+    document.body.appendChild(renderCanvas)
 
-    renderImage = new Konva.Image({
-      x: 0,
-      y: 0,
-      name: 'render',
-      image: renderCanvas,
-      draggable: false
-    })
-
+    renderCTX.fillStyle = 'white'
+    renderCTX.fillRect(0, 0, renderCanvas.width, renderCanvas.height)
 
     for (var i = hInc / 2; i < gridMaxWidth; i += hInc) {
       for (var j = hInc / 2; j < gridMaxHeight; j += vInc) {
@@ -162,12 +162,46 @@ function process (e) {
       }
     }
 
-    tr.remove()
-    yoda.remove()
-    layer.add(renderImage)
-    renderImage.moveToBottom()
-    vlines.moveToTop()
-    hlines.moveToTop()
+    for (i = 1; i <= gridMaxWidth; i += hInc) {
+      renderCTX.beginPath()
+      renderCTX.moveTo(i, 1)
+      renderCTX.lineTo(i, gridMaxHeight)
+      ctx.strokeStyle = '#33FF33'
+      renderCTX.stroke()
+    }
+
+    for (i = 1; i <= gridMaxHeight; i += vInc) {
+      renderCTX.beginPath()
+      renderCTX.moveTo(1, i)
+      renderCTX.lineTo(gridMaxWidth, i)
+      ctx.strokeStyle = '#33FF33'
+      renderCTX.stroke()
+    }
+
+    // Draw all the lines across the vertical axis
+    vlines = new Konva.Line({
+      points: hArray,
+      stroke: 'blue',
+      strokeWidth: 0.1,
+      lineCap: 'round',
+      lineJoin: 'round'
+    })
+
+    var vArray = []
+    for (i = 1; i <= gridMaxHeight; i += vInc) {
+      vArray.push(1, i)
+      vArray.push(gridMaxWidth - 1, i)
+      vArray.push(1, i)
+    }
+    hlines = new Konva.Line({
+      points: vArray,
+      stroke: 'blue',
+      strokeWidth: 0.1,
+      lineCap: 'round',
+      lineJoin: 'round'
+    })
+
+    stage.destroy()
     render.classList.remove('active')
     stage.off('click tap')
   })
