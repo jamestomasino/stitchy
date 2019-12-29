@@ -10,7 +10,7 @@ My wife loves to crochet, and likes to challenge herself by making new rectangul
 - [x] `Rotate`, `Scale`, `Transform` the image onto the grid
 - [x] `Process` the image using either black & white or dominant color per grid block (click the red button)
 - [ ] `Print` or `Save` the generated image (right-click to save as works)
-- [ ] Make everything look pretty
+- [x] Make everything look pretty
 
 ## Development
 
