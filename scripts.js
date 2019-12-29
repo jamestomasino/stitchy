@@ -1,4 +1,4 @@
-/* global FileReader, Image, Konva, ColorThief */
+/* global FileReader, Image, Konva, ColorThief, nearestColor */
 var imageForm = document.getElementById('imageForm')
 var render = document.getElementById('render')
 var imageLoader = document.getElementById('imageLoader')
@@ -26,6 +26,7 @@ var gridMaxHeight // total height of the grid in pixels
 const colorThief = new ColorThief()
 var colors // total number of colors to extract from pattern
 var palette // color palette of pattern
+var getColor // nearest color calculator
 
 form.addEventListener('submit', process)
 
@@ -136,7 +137,8 @@ function bindImageUpload () {
         pattern.moveToBottom()
         layer.batchDraw()
         palette = colorThief.getPalette(img, colors)
-        console.log(palette)
+        var rgbpalette = palette.map(x => rgbToHex (x[0], x[1], x[2]))
+        getColor = nearestColor.from(rgbpalette)
       }
       img.src = event.target.result
     }
@@ -184,46 +186,34 @@ function bindRenderButton () {
     // Loop through grid at midpoints of quares
     for (var i = 1; i < gridMaxWidth; i += hInc) {
       for (var j = 1; j < gridMaxHeight; j += vInc) {
-        // Get color at center of each grid square
-        // var c = ctx.getImageData(i, j, 1, 1).data
-
         let R = 0
         let G = 0
         let B = 0
         let A = 0
-
         const data = ctx.getImageData(i, j, hInc, vInc).data
-
         const components = data.length
-
         for (let i = 0; i < components; i += 4) {
           // A single pixel (R, G, B, A) will take 4 positions in the array:
           const r = data[i]
           const g = data[i + 1]
           const b = data[i + 2]
           const a = data[i + 3]
-
-          // Update components for solid color and alpha averages:
           R += r
           G += g
           B += b
           A += a
         }
-
         const pixelsPerChannel = components / 4
-
-        // The | operator is used here to perform an integer division:
-
         R = R / pixelsPerChannel | 0
         G = G / pixelsPerChannel | 0
         B = B / pixelsPerChannel | 0
-
         A = A / pixelsPerChannel / 255
-
+        // flatten RGBA colors to RGB to prep for nearest-neighbor calc
         var rgb = rgba2rgb(R, G, B, A)
-
+        var hex = getColor(rgbToHex(rgb[0], rgb[1], rgb[2]))
+        console.log(hex)
         // Fill square in output canvas with captured color
-        renderCTX.fillStyle = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')'
+        renderCTX.fillStyle = hex
         renderCTX.fillRect(i, j, hInc, vInc)
       }
     }
@@ -257,9 +247,15 @@ function bindRenderButton () {
 
 function rgba2rgb (r, g, b, a) {
   return [
-    (1 - a) * 255 + a * r,
-    (1 - a) * 255 + a * g,
-    (1 - a) * 255 + a * b
+    Math.round((1 - a) * 255 + a * r),
+    Math.round((1 - a) * 255 + a * g),
+    Math.round((1 - a) * 255 + a * b)
   ]
 }
 
+function rgbToHex (r, g, b) {
+  return '#' + [r, g, b].map(x => {
+    const hex = x.toString(16)
+    return hex.length === 1 ? '0' + hex : hex
+  }).join('')
+}
