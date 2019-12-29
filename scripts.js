@@ -14,6 +14,8 @@ var stage // Konva canvas container
 var layer // Konva canvas layer
 var hlines // number of horizontal lines
 var vlines // number of vertical lines
+var gw // grid width
+var gh // grid height
 var tr // transform handle
 var hInc // horizontal line pixel increment
 var vInc // vertical line pixel increment
@@ -26,7 +28,11 @@ var gridMaxHeight // total height of the grid in pixels
 const colorThief = new ColorThief()
 var colors // total number of colors to extract from pattern
 var palette // color palette of pattern
+var rgbpalette // color palette of pattern
 var getColor // nearest color calculator
+var renderedGrid // 2d array of grid colors
+var renderCanvas // rendered Canvas
+var renderCTX // rendered Canvas context
 
 form.addEventListener('submit', process)
 
@@ -50,8 +56,8 @@ function calculateGrid () {
   gridHeight = height - 5
 
   // How many divisions will we use?
-  var gw = parseInt(columns.value, 10)
-  var gh = parseInt(rows.value, 10)
+  gw = parseInt(columns.value, 10)
+  gh = parseInt(rows.value, 10)
   colors = parseInt(colorsInput.value, 10)
 
   // Calculate the increments we can use to make that many lines
@@ -135,7 +141,7 @@ function bindImageUpload () {
         pattern.moveToBottom()
         layer.batchDraw()
         palette = colorThief.getPalette(img, colors)
-        var rgbpalette = palette.map(x => rgbToHex(x[0], x[1], x[2]))
+        rgbpalette = palette.map(x => rgbToHex(x[0], x[1], x[2]))
         rgbpalette.push('#fff') // force add white for backgrounds
         getColor = nearestColor.from(rgbpalette)
       }
@@ -181,22 +187,21 @@ function bindRenderButton () {
       var ctx = canvas.getContext('2d')
 
       // Create new canvas object for flat output render
-      var renderCanvas = document.createElement('canvas')
-      var renderCTX = renderCanvas.getContext('2d')
+      renderCanvas = document.createElement('canvas')
+      renderCTX = renderCanvas.getContext('2d')
       renderCanvas.width = gridMaxWidth
       renderCanvas.height = gridMaxHeight
-      renderCTX.fillStyle = 'white'
-      renderCTX.fillRect(0, 0, renderCanvas.width, renderCanvas.height)
       flex.appendChild(renderCanvas)
 
-      // Loop through grid at midpoints of quares
-      for (var i = 1; i < gridMaxWidth; i += hInc) {
-        for (var j = 1; j < gridMaxHeight; j += vInc) {
+      renderedGrid = []
+      for (var i = 0; i < gw; ++i) {
+        renderedGrid[i] = []
+        for (var j = 0; j < gh; ++j) {
           let R = 0
           let G = 0
           let B = 0
           let A = 0
-          const data = ctx.getImageData(i, j, hInc, vInc).data
+          const data = ctx.getImageData(i * hInc, j * vInc, hInc, vInc).data
           const components = data.length
           for (let i = 0; i < components; i += 4) {
             // A single pixel (R, G, B, A) will take 4 positions in the array:
@@ -218,29 +223,14 @@ function bindRenderButton () {
           var rgb = rgba2rgb(R, G, B, A)
           var hex = getColor(rgbToHex(rgb[0], rgb[1], rgb[2]))
           // Fill square in output canvas with captured color
-          renderCTX.fillStyle = hex
-          renderCTX.fillRect(i, j, hInc, vInc)
+          renderedGrid[i][j] = hex
         }
       }
 
-      // Draw vertical grid lines on top
-      for (i = 1; i <= gridMaxWidth; i += hInc) {
-        renderCTX.beginPath()
-        renderCTX.moveTo(i, 1)
-        renderCTX.lineTo(i, gridMaxHeight)
-        ctx.strokeStyle = '#33FF33'
-        renderCTX.stroke()
-      }
-
-      // Draw horizontal grid lines on top
-      for (i = 1; i <= gridMaxHeight; i += vInc) {
-        renderCTX.beginPath()
-        renderCTX.moveTo(1, i)
-        renderCTX.lineTo(gridMaxWidth, i)
-        ctx.strokeStyle = '#33FF33'
-        renderCTX.stroke()
-      }
-
+      // draw Render canvas
+      drawRenderCanvas()
+      // bind mouse clicks on the render canvas to change colors
+      bindRenderCanvas()
       // Destroy Konva canvas
       stage.destroy()
       // Remove render button
@@ -258,6 +248,60 @@ function bindRenderButton () {
       document.body.appendChild(link)
     }, 300)
   })
+}
+
+function bindRenderCanvas () {
+  renderCanvas.addEventListener('click', function (e) {
+    var mouseX, mouseY
+    if (e.offsetX) {
+      mouseX = e.offsetX
+      mouseY = e.offsetY
+    } else if (e.layerX) {
+      mouseX = e.layerX
+      mouseY = e.layerY
+    }
+    var i = Math.floor(mouseX / hInc)
+    var j = Math.floor(mouseY / vInc)
+    var colorMatch = rgbpalette.indexOf(renderedGrid[i][j])
+    if (colorMatch === -1) {
+      console.log('We don\'t match anything in the palette. Probably a grid line.')
+    } else if (colorMatch === rgbpalette.length - 1) {
+      colorMatch = 0
+    } else {
+      colorMatch++
+    }
+    renderedGrid[i][j] = rgbpalette[colorMatch]
+    drawRenderCanvas()
+  })
+}
+
+function drawRenderCanvas () {
+  renderCTX.fillStyle = 'white'
+  renderCTX.fillRect(0, 0, renderCanvas.width, renderCanvas.height)
+  for (var i = 0; i < gw; ++i) {
+    for (var j = 0; j < gh; ++j) {
+      renderCTX.fillStyle = renderedGrid[i][j]
+      renderCTX.fillRect(i * hInc, j * vInc, hInc, vInc)
+    }
+  }
+
+  // Draw vertical grid lines on top
+  for (i = 1; i <= gridMaxWidth; i += hInc) {
+    renderCTX.beginPath()
+    renderCTX.moveTo(i, 1)
+    renderCTX.lineTo(i, gridMaxHeight)
+    renderCTX.strokeStyle = '#000'
+    renderCTX.stroke()
+  }
+
+  // Draw horizontal grid lines on top
+  for (i = 1; i <= gridMaxHeight; i += vInc) {
+    renderCTX.beginPath()
+    renderCTX.moveTo(1, i)
+    renderCTX.lineTo(gridMaxWidth, i)
+    renderCTX.strokeStyle = '#000'
+    renderCTX.stroke()
+  }
 }
 
 function rgba2rgb (r, g, b, a) {
