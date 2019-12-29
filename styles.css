@@ -1,0 +1,99 @@
+html,
+body {
+  margin: 0;
+  overflow: hidden;
+  background-color: #303030;
+  font-size:18px;
+  color:#c1c1c1;
+  line-height:1.4rem;
+  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+  height:100%;
+}
+
+p {
+  margin-bottom:.75rem;
+}
+
+label {
+  display: block; 
+  margin-bottom: 20px; 
+}
+
+label span {
+  width: 200px;
+  display: inline-block;
+}
+
+#flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+#form.hide {
+  display: none;
+}
+
+#container {
+  display: none;
+}
+
+#container.active {
+  display: block;
+}
+
+#imageForm {
+  display: none;
+}
+
+#imageForm.active {
+  display: block;
+}
+
+.konvajs-content {
+  background-color: #ccc;
+}
+
+input {
+  background-color: transparent;
+  text-transform: uppercase;
+  border-radius: 0;
+  border: 2px solid #fff;
+  color: #fff;
+  height: 45px;
+  margin-left: 20px;
+}
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+  color: #fff;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color: #fff;
+   opacity: 1;
+}
+::-ms-input-placeholder { /* Microsoft Edge */
+   color: #fff;
+}
+input[type=submit], button[type=submit], #render {
+   text-transform: uppercase;
+   padding: 10px 60px;
+   color: white;
+   background: #444;
+   font-weight: normal;
+   border: 0;
+}
+input[type=number] {
+  text-align: center;
+}
+input[type=file] {
+  border: 0;
+}
+#render.active {
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 0;
+  box-shadow: -8px 15px 41px 8px rgba(0,0,0,0.4);
+}
+

@@ -3,6 +3,7 @@ var imageForm = document.getElementById('imageForm')
 var render = document.getElementById('render')
 var imageLoader = document.getElementById('imageLoader')
 var form = document.getElementById('form')
+var flex = document.getElementById('flex')
 var container = document.getElementById('container')
 var rows = document.getElementById('rows')
 var columns = document.getElementById('columns')
@@ -171,7 +172,7 @@ function bindRenderButton () {
     renderCanvas.height = gridMaxHeight
     renderCTX.fillStyle = 'white'
     renderCTX.fillRect(0, 0, renderCanvas.width, renderCanvas.height)
-    document.body.appendChild(renderCanvas)
+    flex.appendChild(renderCanvas)
 
     // Loop through grid at midpoints of quares
     for (var i = hInc / 2; i < gridMaxWidth; i += hInc) {

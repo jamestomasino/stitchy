@@ -7,45 +7,32 @@
     <meta name="description" content="A tool to help generate crochet patterns">
     <title>Stitchy</title>
     <link rel="shortcut icon" href="https://jamestomasino.github.io/stitchy/favicon.ico">
-    <style>
-      a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,caption,center,cite,code,dd,del,details,dfn,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,output,p,pre,q,ruby,s,samp,section,small,span,strike,strong,sub,summary,sup,table,tbody,td,tfoot,th,thead,time,tr,tt,u,ul,var,video{margin:0;padding:0;border:0;font:inherit;vertical-align:baseline}
-      article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}
-      body{font-family:"Consolas",monospace;font-size:18px;margin:0;background:#303030;color:#c1c1c1;line-height:1.4rem;}
-      a{text-decoration:none;color:cyan}
-      p{margin-bottom:.75rem}
-      label { display: block; margin-bottom: 20px; }
-      #form.hide { display: none; }
-      #container { display: none; }
-      #container.active { display: block; }
-      #imageForm { display: none; }
-      #imageForm.active { display: block; }
-      .konvajs-content { background-color: #ccc; }
-      #render.active { display: block; position: absolute; right: 0; top: 0; width: 100px; height: 40px; background-color: #e10000; }
-      input { height: 35px; }
-    </style>
+    <link href="styles.css" rel="stylesheet" type="text/css">
     <script defer type="text/javascript" src="https://unpkg.com/konva@4.1.0/konva.min.js"></script>
     <script defer type="text/javascript" src="./scripts.js"></script>
   </head>
   <body>
-    <form action="#" method="post" id="form">
-      <label>
-        Number of rows:
-        <input type="number" id="rows" name="rows" min="1" max="1000" value="50" />
-      </label>
-      <label>
-        Number of columns:
-        <input type="number" id="columns" name="columns" min="1" max="1000" value="50" />
-      </label>
-      <button type="submit">Submit</button>
-    </form>
+    <div id="flex">
+      <form action="#" method="post" id="form">
+        <label for="rows">
+          <span>Number of rows:</span>
+          <input type="number" id="rows" name="rows" min="1" max="1000" value="50" />
+        </label>
+        <label for="columns">
+          <span>Number of columns:</span>
+          <input type="number" id="columns" name="columns" min="1" max="1000" value="50" />
+        </label>
+        <button type="submit">Next</button>
+      </form>
 
-    <div id="imageForm">
-      <label>
-        Image File:
-        <input type="file" id="imageLoader" name="imageLoader"/>
-      </label>
+      <div id="imageForm">
+        <label>
+          Image File:
+          <input type="file" id="imageLoader" name="imageLoader"/>
+        </label>
+      </div>
+      <div id="container"></div>
     </div>
-    <div id="container"></div>
-    <div id="render"></div>
+    <div id="render">Render</div>
   </body>
 </html>
