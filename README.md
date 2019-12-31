@@ -12,10 +12,6 @@ My wife loves to crochet, and likes to challenge herself by making new rectangul
 - [x] Make everything look pretty
 - [x] Click on a rendered grid square to cycle its color through palette options
 
-## Development
-
-This project does not have any build tools, but you can choose to install the yarn/npm dependencies to activate linting settings.
-
 ## License
 
 Stitchy code is licensed under [GPL-3.0](LICENSE).
